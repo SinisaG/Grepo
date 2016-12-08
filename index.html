@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Grepo - aggregate github repos contributions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+        <nav class="row">
+          <div class="nav-wrapper col s12">
+            <a href="#" class="brand-logo">Grepo</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+              <li><router-link to="/">Search</router-link></li>
+            </ul>
+          </div>
+        </nav>
+        <div class="container">
+          <router-view></router-view>
+        </div>
+    </div>
+  </body>
+</html>
