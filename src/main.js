@@ -1,27 +1,11 @@
 import Vue from 'vue'
-import Search from './components/Search'
-import VueRouter from 'vue-router'
+import App from './App'
 
-Vue.use(VueRouter)
-
-const Landing = {
-  template: '<Search/>',
-  components: { Search }
-}
-const Graph = { template: '<div>bar</div>' }
-
-const routes = [
-  { path: '/', component: Landing },
-  { path: '/graph', component: Graph }
-]
-
-const router = new VueRouter({
-  routes: routes
+var app = new Vue({
+  el: '#app',
+  components: {
+    App
+  }
 })
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router: router
-}).$mount('#app')
-
+console.log(app)

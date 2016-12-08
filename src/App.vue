@@ -1,29 +1,54 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <hello></hello>
+  <div class="row">
+    <div class="col s4">
+          <search></search>
+    </div>
+    <div class="col s8">
+        <display-list></display-list>
+        <stats></stats>
+    </div>
   </div>
 </template>
 
 <script>
-import Hello from './components/Hello'
+import Search from './components/Search'
+import DisplayList from './components/DisplayList'
+import Stats from './components/Stats'
+import _ from 'lodash'
+import Vuex from 'vuex'
+import Vue from 'vue'
+
+Vue.use(Vuex)
+const store = new Vuex.Store({
+  state: {
+    projectList: []
+  },
+  mutations: {
+    add (state, project) {
+      var has = _.some(state.projectList, {'id': project.id})
+      if (!has) {
+        state.projectList.push(project)
+      }
+    },
+    remove (state, project) {
+      state.projectList = _.remove(state.projectList, function (n) {
+        return n.id !== project.id
+      })
+    }
+  }
+})
 
 export default {
   name: 'app',
+  store,
   components: {
-    Hello
+    'search': Search,
+    'display-list': DisplayList,
+    'stats': Stats
   }
 }
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style scoped>
 
 </style>
