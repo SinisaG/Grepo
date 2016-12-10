@@ -1,21 +1,35 @@
 <template>
-  <div class="row">
-    <div class="col s12">
-      <div v-show="selectedProjects.length > 0">
-        <div class="chart-wrapper">
-          <canvas id="myChart" width="400" height="400"></canvas>
-        </div>
-        <h3>Contributors</h3>
-        <ol>
-          <li v-for="contributor in allContributors">
-            <a :href="contributor.url">
-                {{contributor.name}} {{contributor.value}} 
-            </a>
-          </li>
-        </ol>
-      </div>
-    </div>
+<div v-show="selectedProjects.length > 0" class="row">
+  <div class="col l8 s12">
+    <table class="striped">
+      <thead>
+        <tr>
+          <th>
+            User
+          </th>
+          <th>
+            Contributions
+          </th>
+          <th>
+            User Profile
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="contributor in allContributors">
+          <td><img :src="contributor.img" v-bind:alt="contributor.name"/> <span>{{contributor.name}}</span></td>
+          <td>{{contributor.value}} </td>
+          <td><a :href="contributor.url">Link</a></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
+  <div class="col l4 s12">
+    <div class="chart-wrapper">
+      <canvas id="myChart" width="400" height="400"></canvas>
+    </div>
+</div>
+</div>
 </template>
 
 <script>
@@ -27,18 +41,17 @@ export default {
   data () {
     return {
       allContributors: [],
-      myChart: null
-    }
-  },
-  computed: {
-    selectedProjects: function () {
-      return this.$store.state.projectList
+      myChart: null,
+      selectedProjects: this.$store.state.projectList
     }
   },
   watch: {
     selectedProjects: function () {
       this.projectChangeHandle()
     }
+  },
+  mounted () {
+    this.$on('draw', this.showContributors)
   },
   methods: {
     projectChangeHandle: function () {
@@ -48,27 +61,32 @@ export default {
       const grabContent = url => window.fetch(url)
       .then(res => res.json())
       var data = []
-      var contributorsCounter = {}
+
       this.selectedProjects.forEach(function (project) {
         data.push(grabContent(project.contributors_url))
       })
-      data.forEach(function (repo) {
-        repo.then(function (repoContributors) {
-          repoContributors.forEach(function (c) {
+      var contributorsCounter = {}
+      for (var i = 0; i < data.length; i++) {
+        data[i].then(function (repoContributors) {
+          for (var j = 0; j < repoContributors.length; j++) {
+            var c = repoContributors[j]
             contributorsCounter[c.login] = contributorsCounter[c.login] || {}
             var current = contributorsCounter[c.login].value || 0
             contributorsCounter[c.login].value = current + c.contributions
             contributorsCounter[c.login].url = c.html_url
-          })
-          this.showContributors(contributorsCounter)
+            contributorsCounter[c.login].img = c.avatar_url
+          }
+          if (i === (data.length)) {
+            this.$emit('draw', contributorsCounter)
+          }
         }.bind(this))
-      }.bind(this))
+      }
     },
     showContributors: function (contributorsCounter) {
       var result = []
       for (var key in contributorsCounter) {
         if (contributorsCounter.hasOwnProperty(key)) {
-          result.push({name: key, value: contributorsCounter[key].value, url: contributorsCounter[key].url})
+          result.push({name: key, value: contributorsCounter[key].value, url: contributorsCounter[key].url, img: contributorsCounter[key].img})
         }
       }
       result = _.sortBy(result, [function (o) { return -o.value }])
@@ -83,13 +101,11 @@ export default {
       var labels = []
       var contributions = []
       var backgrounds = []
-      var borders = []
       for (var i = 0; i < elements.length; i++) {
         var current = elements[i]
         contributions.push(current.value)
         labels.push(current.name)
-        backgrounds.push(getRandomColor())
-        borders.push(getRandomColor())
+        backgrounds.push(getRandomColor(current.name))
       }
       this.myChart = new Chart(ctx, {
         type: 'bar',
@@ -99,7 +115,6 @@ export default {
             label: '# of Contributions',
             data: contributions,
             backgroundColor: backgrounds,
-            borderColor: borders,
             borderWidth: 1
           }]
         },
@@ -113,13 +128,17 @@ export default {
           }
         }
       })
-      function getRandomColor () {
-        var letters = '0123456789ABCDEF'
-        var color = '#'
-        for (var i = 0; i < 6; i++) {
-          color += letters[Math.floor(Math.random() * 16)]
+      function getRandomColor (str) {
+        var hash = 0
+        for (var i = 0; i < str.length; i++) {
+          hash = str.charCodeAt(i) + ((hash << 5) - hash)
         }
-        return color
+        var colour = '#'
+        for (var j = 0; j < 3; j++) {
+          var value = (hash >> (j * 8)) & 0xFF
+          colour += ('00' + value.toString(16)).substr(-2)
+        }
+        return colour
       }
     }
   }
@@ -131,5 +150,18 @@ export default {
   #myChart {
     height: auto !important;
     width: 100% !important;
+  }
+
+  tr img {
+    width: 48px;
+    height: auto;
+    max-width: 100%;
+    vertical-align: middle;
+    display: inline-block;
+    margin-right: 12px;
+    border-radius: 50%;
+  }
+  tr span {
+    vertical-align: middle;
   }
 </style>

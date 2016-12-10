@@ -1,7 +1,7 @@
 {
   "name": "git-contributor",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "Small Vuejs project, that uses github api, to explore contributions accross projects.",
   "author": "Sinisa Grubor <sinisa@grubor.si>",
   "private": true,
   "scripts": {

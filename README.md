@@ -1,6 +1,6 @@
 # git-contributor
 
-> A Vue.js project
+> Small Vuejs project, that uses github api, to explore contributions accross projects.
 
 ## Build Setup
 

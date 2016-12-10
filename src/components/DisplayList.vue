@@ -1,13 +1,12 @@
 
 <template>
   <div class="row">
-    <div class="col s12">
+    <div class="col s12 l8">
       <div v-if="displayComponent">
-        <ul>
-          <li v-for="item in displayList" class="inline-list" v-on:click="removeItem(item)">
-            {{item.name}}
-          </li>
-        </ul>
+        <div v-for="item in displayList" v-on:click="removeItem(item)" class="chip">
+          {{item.name}}
+          <i class="close material-icons">close</i>
+        </div>
       </div>
     </div>
   </div>
@@ -16,10 +15,12 @@
 <script>
 export default {
   name: 'displayList',
+  data () {
+    return {
+      displayList: this.$store.state.projectList
+    }
+  },
   computed: {
-    displayList: function () {
-      return this.$store.state.projectList
-    },
     displayComponent: function () {
       return this.displayList.length > 0
     }
@@ -34,19 +35,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .inline-list {
-    display: inline-block;
-    border-radius: 4px;
-    margin: 2px;
-    background: grey;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 4px;
-  }
-  
-  .inline-list:hover {
-    background: red;
-    cursor: pointer;
-    color: white;
-  }
+
 </style>

@@ -1,9 +1,9 @@
 <template>
   <div class="row">
-    <div class="col s4">
+    <div class="col s12 l2">
           <search></search>
     </div>
-    <div class="col s8">
+    <div class="col s12 l10">
         <display-list></display-list>
         <stats></stats>
     </div>
@@ -27,13 +27,12 @@ const store = new Vuex.Store({
     add (state, project) {
       var has = _.some(state.projectList, {'id': project.id})
       if (!has) {
-        state.projectList.push(project)
+        state.projectList.splice(state.projectList.length, 1, project)
       }
     },
     remove (state, project) {
-      state.projectList = _.remove(state.projectList, function (n) {
-        return n.id !== project.id
-      })
+      var idx = _.findIndex(state.projectList, function (p) { return p.id === project.id })
+      state.projectList.splice(idx, 1)
     }
   }
 })
