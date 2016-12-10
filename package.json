@@ -1,5 +1,5 @@
 {
-  "name": "git-contributor",
+  "name": "grepo",
   "version": "1.0.0",
   "description": "Small Vuejs project, that uses github api, to explore contributions accross projects.",
   "author": "Sinisa Grubor <sinisa@grubor.si>",
@@ -16,7 +16,6 @@
     "chart.js": "^2.4.0",
     "lodash": "^4.17.2",
     "vue": "^2.1.0",
-    "vue-router": "^2.1.1",
     "vuex": "^2.0.0"
   },
   "devDependencies": {

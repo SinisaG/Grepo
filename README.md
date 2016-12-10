@@ -1,4 +1,4 @@
-# git-contributor
+# Grepo
 
 > Small Vuejs project, that uses github api, to explore contributions accross projects.
 
