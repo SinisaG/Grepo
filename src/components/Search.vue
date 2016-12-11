@@ -8,7 +8,7 @@
       <div v-if="repos.length > 0">
         <div class="collection">
           <a class="collection-item" v-for="repo in repos" v-on:click="addProject(repo)">
-            {{repo.name}}
+            {{repo.name}} ({{repo.stargazers_count}} stars)
           </a>
         </ul>
       </div>
@@ -49,7 +49,7 @@ export default {
         }
       })
       .then(function (data) {
-        this.repos = data
+        this.repos = _.sortBy(data, [function (o) { return -o.stargazers_count }])
       }.bind(this))
       .catch(function (error) {
         this.repos = []
