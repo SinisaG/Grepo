@@ -2,6 +2,10 @@
 
 > Small Vuejs project, that uses github api, to explore contributions accross projects.
 
+## Demo
+
+Demo: https://grepo.herokuapp.com/
+
 ## Build Setup
 
 ``` bash
