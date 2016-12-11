@@ -1,7 +1,9 @@
 <template>
   <div class="row">
     <div v-if="error.display" class="error-api z-depth-4">
-      Error: {{error.message}} - 
+      Error: {{error.message}}
+      <br/>
+      <br/>
       <a href="https://api.github.com/rate_limit" target="_blank">Check your rate limit</a>
     </div>
     <div class="col s12 l2">
@@ -81,16 +83,16 @@ export default {
 <style scoped>
   .error-api {
     position: fixed; 
-    top: 0;
-    bottom: 0;
-    left: 0; 
-    right: 0;
-    padding: 20vh 12px 24px;
+    top: 100px;
+    right: 20px; 
+    padding: 24px;
     background: rgba(0, 0, 0, 0.8);
     color: #ee6e73;
     font-weight: bold;
-    font-size: 36px;
+    font-size: 16px;
     border-radius: 4px;
+    width: 400px;
+    max-width: 100%;
     -webkit-animation: fade 10s infinite; /* Safari 4.0 - 8.0 */
     -webkit-animation-delay: 5s; /* Safari 4.0 - 8.0 */
     animation: fade 10s infinite;
