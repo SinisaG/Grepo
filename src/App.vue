@@ -26,6 +26,9 @@
       Error: {{error.message}}
       <br/>
       <br/>
+      <a v-on:click="login" href="#">Authenticate</a>
+      <br/>
+      <br/>
       <a href="https://api.github.com/rate_limit" target="_blank">Check your rate limit</a>
     </div>
   </div>
