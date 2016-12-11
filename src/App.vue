@@ -1,17 +1,32 @@
 <template>
   <div class="row">
-    <div v-if="error.display" class="error-api z-depth-4">
-      Error: {{error.message}}
-      <br/>
-      <br/>
-      <a href="https://api.github.com/rate_limit" target="_blank">Check your rate limit</a>
-    </div>
+    <nav class="col s12">
+      <div class="nav-wrapper">
+        <a href="#" class="brand-logo">Grepo</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li v-if="!user.loggedIn">
+            <a v-on:click="login" class="waves-effect waves-light btn">
+              Authorize with git
+            </a>
+          </li>
+          <li v-else>
+              <span class="username">Hello {{user.name}}</span>
+          </li>
+        </ul>
+      </div>
+    </nav>
     <div class="col s12 l2">
           <search></search>
     </div>
     <div class="col s12 l10">
         <display-list></display-list>
         <stats></stats>
+    </div>
+    <div v-if="error.display" class="error-api z-depth-4">
+      Error: {{error.message}}
+      <br/>
+      <br/>
+      <a href="https://api.github.com/rate_limit" target="_blank">Check your rate limit</a>
     </div>
   </div>
 </template>
@@ -23,6 +38,7 @@ import Stats from './components/Stats'
 import _ from 'lodash'
 import Vuex from 'vuex'
 import Vue from 'vue'
+import Hello from 'hellojs'
 
 Vue.use(Vuex)
 const store = new Vuex.Store({
@@ -31,6 +47,11 @@ const store = new Vuex.Store({
     error: {
       display: false,
       message: ''
+    },
+    user: {
+      loggedIn: false,
+      accessToken: '',
+      name: ''
     }
   },
   mutations: {
@@ -51,6 +72,11 @@ const store = new Vuex.Store({
     clearError (state) {
       state.error.display = false
       state.error.message = ''
+    },
+    login (state, [data, user]) {
+      state.user.accessToken = data.authResponse.access_token
+      state.user.name = user.name
+      state.user.loggedIn = true
     }
   },
   actions: {
@@ -69,7 +95,22 @@ export default {
   store,
   data () {
     return {
-      error: this.$store.state.error
+      error: this.$store.state.error,
+      github: Hello('github'),
+      user: this.$store.state.user,
+      clientId: process.env.CLIENT_ID
+    }
+  },
+  mounted () {
+    Hello.init({ github: this.clientId })
+  },
+  methods: {
+    login: function () {
+      this.github.login(function (data) {
+        this.github.api('me').then(function (user) {
+          this.$store.commit('login', [data, user])
+        }.bind(this))
+      }.bind(this))
     }
   },
   components: {
@@ -80,7 +121,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
   .error-api {
     position: fixed; 
     top: 100px;
@@ -108,5 +149,15 @@ export default {
   @keyframes fade {
       from {opacity: 1;}
       to {opacity: 0;}
+  }
+
+  nav {
+    margin-bottom: 20px;
+  }
+
+  nav .username {
+    font--size: 16px;
+    font-weight: bold;
+    padding: 24px;
   }
 </style>

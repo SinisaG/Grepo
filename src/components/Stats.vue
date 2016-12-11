@@ -57,8 +57,14 @@ export default {
     projectChangeHandle: function () {
       this.calculate()
     },
+    buildUrl (url, accessToken) {
+      if (accessToken.length > 0) {
+        return url + '?access_token=' + accessToken
+      }
+      return url
+    },
     calculate: function () {
-      const grabContent = url => window.fetch(url)
+      const grabContent = url => window.fetch(this.buildUrl(url, this.$store.state.user.accessToken))
       .then(function (response) {
         if (response.status === 200) {
           return response.json()

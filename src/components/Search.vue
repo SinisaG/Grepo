@@ -39,7 +39,7 @@ export default {
         this.repos = []
         return
       }
-      window.fetch(`https://api.github.com/users/${this.searchTerm}/repos`, {
+      window.fetch(this.buildUrl(`https://api.github.com/users/${this.searchTerm}/repos`, this.$store.state.user.accessToken), {
         method: 'get'
       }).then(function (response) {
         if (response.status === 200) {
@@ -58,6 +58,12 @@ export default {
     }, 700),
     addProject: function (project) {
       this.$store.commit('add', project)
+    },
+    buildUrl (url, accessToken) {
+      if (accessToken.length > 0) {
+        return url + '?access_token=' + accessToken
+      }
+      return url
     }
   }
 }
