@@ -59,7 +59,13 @@ export default {
     },
     calculate: function () {
       const grabContent = url => window.fetch(url)
-      .then(res => res.json())
+      .then(function (response) {
+        if (response.status === 200) {
+          return response.json()
+        } else {
+          return response.json().then(function (error) { throw error })
+        }
+      })
       var data = []
 
       this.selectedProjects.forEach(function (project) {
@@ -79,6 +85,9 @@ export default {
           if (i === (data.length)) {
             this.$emit('draw', contributorsCounter)
           }
+        }.bind(this))
+        .catch(function (error) {
+          this.$store.dispatch('raiseErrorAsync', error)
         }.bind(this))
       }
     },
@@ -105,7 +114,7 @@ export default {
         var current = elements[i]
         contributions.push(current.value)
         labels.push(current.name)
-        backgrounds.push(getRandomColor(current.name))
+        backgrounds.push(getColorFromName(current.name))
       }
       this.myChart = new Chart(ctx, {
         type: 'bar',
@@ -128,7 +137,7 @@ export default {
           }
         }
       })
-      function getRandomColor (str) {
+      function getColorFromName (str) {
         var hash = 0
         for (var i = 0; i < str.length; i++) {
           hash = str.charCodeAt(i) + ((hash << 5) - hash)

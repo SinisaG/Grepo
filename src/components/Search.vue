@@ -1,9 +1,5 @@
 <template>
   <div class="row">
-    <div v-if="showError" class="error-api z-depth-4">
-        Error: {{error}} - 
-        <a href="https://api.github.com/rate_limit" target="_blank">Check your rate limit</a>
-    </div>
     <div class="col s12">
       <form>
         <label for="searchField">Search repos</label>
@@ -28,18 +24,12 @@ export default {
   data () {
     return {
       repos: [],
-      searchTerm: '',
-      error: ''
+      searchTerm: ''
     }
   },
   watch: {
     searchTerm: function () {
       this.searchTermUpdate()
-    }
-  },
-  computed: {
-    showError: function () {
-      return this.error.length > 0
     }
   },
   methods: {
@@ -63,10 +53,7 @@ export default {
       }.bind(this))
       .catch(function (error) {
         this.repos = []
-        this.error = error.message
-        window.setTimeout(function () {
-          this.error = ''
-        }.bind(this), 12000)
+        this.$store.dispatch('raiseErrorAsync', error)
       }.bind(this))
     }, 700),
     addProject: function (project) {
@@ -81,32 +68,4 @@ export default {
   a:hover {
     cursor: pointer;
   }
-
-.error-api {
-  position: fixed; 
-  top: 0;
-  bottom: 0;
-  left: 0; 
-  right: 0;
-  padding: 20vh 12px 24px;
-  background: rgba(0, 0, 0, 0.8);
-  color: #ee6e73;
-  font-weight: bold;
-  font-size: 36px;
-  border-radius: 4px;
-  -webkit-animation: fade 10s infinite; /* Safari 4.0 - 8.0 */
-  -webkit-animation-delay: 5s; /* Safari 4.0 - 8.0 */
-  animation: fade 10s infinite;
-  animation-delay: 5s;
-}
-/* Safari 4.0 - 8.0 */
-@-webkit-keyframes fade {
-    from {opacity: 1;}
-    to {opacity: 0;}
-}
-
-@keyframes fade {
-    from {opacity: 1;}
-    to {opacity: 0;}
-}
 </style>
