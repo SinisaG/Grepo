@@ -1,35 +1,35 @@
 <template>
-<div v-show="selectedProjects.length > 0" class="row">
-  <div class="col l8 s12">
-    <table class="striped">
-      <thead>
-        <tr>
-          <th>
-            User
-          </th>
-          <th>
-            Contributions
-          </th>
-          <th>
-            User Profile
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="contributor in allContributors">
-          <td><img :src="contributor.img" v-bind:alt="contributor.name"/> <span>{{contributor.name}}</span></td>
-          <td>{{contributor.value}} </td>
-          <td><a :href="contributor.url">Link</a></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="col l4 s12">
-    <div class="chart-wrapper">
-      <canvas id="myChart" width="400" height="400"></canvas>
+  <div v-show="selectedProjects.length > 0" class="row">
+    <div class="col l8 s12">
+      <table class="striped">
+        <thead>
+          <tr>
+            <th>
+              User
+            </th>
+            <th>
+              Contributions
+            </th>
+            <th>
+              User Profile
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="contributor in allContributors">
+            <td><img :src="contributor.img" v-bind:alt="contributor.name"/> <span>{{contributor.name}}</span></td>
+            <td>{{contributor.value}} </td>
+            <td><a :href="contributor.url">Link</a></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-</div>
-</div>
+    <div class="col l4 s12">
+      <div class="chart-wrapper">
+        <canvas id="myChart" width="400" height="400"></canvas>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
